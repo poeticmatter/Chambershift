@@ -8,7 +8,7 @@ public class CrateManager : MonoBehaviour {
 	public float timeSinceLastShift;
 	public static CrateManager inst;
 	private CrateShift[] crates;
-	public SimplePlatformController player = null;
+	private SimplePlatformController player = null;
 
 	void Awake () {
 		inst = this;

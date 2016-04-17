@@ -5,7 +5,9 @@ using System.Collections.Generic;
 public class Spawn : MonoBehaviour {
 	public GameObject player;
 	public GameObject crate;
+	public GameObject enemy1;
 	public int numberOfCrates;
+	public int numberOfEnemies;
 	public int columns = 15;
 	public int rows = 9;
 	private List<Vector3> gridPositions = new List<Vector3>();
@@ -15,6 +17,7 @@ public class Spawn : MonoBehaviour {
 		InitialiseList();
 		SpawnPlayer();
 		SpawnCrates();
+		SpawnEnemies();
 	}
 
 	void InitialiseList()
@@ -47,6 +50,17 @@ public class Spawn : MonoBehaviour {
 			Vector3 location = gridPositions[randomLocation];
 			gridPositions.RemoveAt(randomLocation);
 			Instantiate(crate, location, Quaternion.identity);
+		}
+	}
+
+	private void SpawnEnemies()
+	{
+		for (int i = 0; i < numberOfEnemies; i++)
+		{
+			int randomLocation = Random.Range(0, gridPositions.Count);
+			Vector3 location = gridPositions[randomLocation];
+			gridPositions.RemoveAt(randomLocation);
+			Instantiate(enemy1, location, Quaternion.identity);
 		}
 	}
 }

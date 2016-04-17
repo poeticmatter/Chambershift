@@ -6,14 +6,13 @@ public class SimplePlatformController : MonoBehaviour
 
 	[HideInInspector]
 	public bool facingRight = true;
-	[HideInInspector]
 	public float moveForce = 365f;
 	public float maxSpeedHorizontal = 1f;
 	public float maxSpeedVertical = 1f;
 
 	public Transform groundCheck;
 
-	private float freezeTime = 0;
+	public float freezeTime = 0;
 
 	private Vector3 velocity = Vector3.zero;
 
