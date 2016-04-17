@@ -8,7 +8,7 @@ public class CrateManager : MonoBehaviour {
 	public float timeSinceLastShift;
 	public static CrateManager inst;
 	private CrateShift[] crates;
-	public SimplePlatformController player;
+	public SimplePlatformController player = null;
 
 	void Awake () {
 		inst = this;
@@ -17,6 +17,10 @@ public class CrateManager : MonoBehaviour {
 
 	void Update()
 	{
+		if (player == null)
+		{
+			player = GameObject.FindGameObjectWithTag("Player").GetComponent<SimplePlatformController>();
+		}
 		timeSinceLastShift += Time.deltaTime;
 		if (timeSinceLastShift > shiftDelay)
 		{
