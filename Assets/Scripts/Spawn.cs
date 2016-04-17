@@ -6,18 +6,44 @@ public class Spawn : MonoBehaviour {
 	public GameObject player;
 	public GameObject crate;
 	public GameObject enemy1;
+	public GameObject enemy2;
+	public GameObject spawnPoint;
+
 	public int numberOfCrates;
-	public int numberOfEnemies;
+	public int numberOfSpawnPoints;
 	public int columns = 15;
 	public int rows = 9;
 	private List<Vector3> gridPositions = new List<Vector3>();
+	public List<Transform> spawnPoints = new List<Transform>();
+
+	public float minSpawnDelay;
+	public float maxSpawnDelay;
+	public float enemy1Chance;
+	public float enemy2Chance;
+
+	private float spawnTimer = 0;
+
+	public static Spawn inst;
 
 	void Awake()
 	{
+		inst = this;
 		InitialiseList();
 		SpawnPlayer();
 		SpawnCrates();
-		SpawnEnemies();
+		SpawnSpawnPoints();
+	}
+
+	void Update()
+	{
+		if (spawnTimer > 0)
+		{
+			spawnTimer -= Time.deltaTime;
+		} else
+		{
+			spawnTimer = Random.Range(minSpawnDelay, maxSpawnDelay);
+			SpawnEnemies();
+		}
 	}
 
 	void InitialiseList()
@@ -53,14 +79,26 @@ public class Spawn : MonoBehaviour {
 		}
 	}
 
-	private void SpawnEnemies()
+	private void SpawnSpawnPoints()
 	{
-		for (int i = 0; i < numberOfEnemies; i++)
+		for (int i = 0; i < numberOfSpawnPoints; i++)
 		{
 			int randomLocation = Random.Range(0, gridPositions.Count);
 			Vector3 location = gridPositions[randomLocation];
 			gridPositions.RemoveAt(randomLocation);
-			Instantiate(enemy1, location, Quaternion.identity);
+			Transform newSpawnPoint = ((GameObject)Instantiate(spawnPoint, location, Quaternion.identity)).transform;
+			spawnPoints.Add(newSpawnPoint);
 		}
 	}
+
+	private void SpawnEnemies()
+	{
+		int randomLocation = Random.Range(0, spawnPoints.Count);
+		Vector3 location = spawnPoints[randomLocation].position;
+		float randomEnemy = Random.Range(0, enemy1Chance + enemy2Chance);
+		GameObject enemy = randomEnemy < enemy1Chance ? enemy1 : enemy2;
+		Instantiate(enemy, location, Quaternion.identity);
+		
+	}
 }
+
