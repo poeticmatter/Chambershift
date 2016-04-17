@@ -10,6 +10,7 @@ public class LoseOnContact : MonoBehaviour {
 		{
 			UIManager.inst.GameOver();
 			GetComponent<SimplePlatformController>().enabled = false;
+			GetComponent<AudioSource>().Play();
 		}
 	}
 }

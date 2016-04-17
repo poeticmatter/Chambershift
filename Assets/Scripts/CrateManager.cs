@@ -9,6 +9,7 @@ public class CrateManager : MonoBehaviour {
 	public static CrateManager inst;
 	private CrateShift[] crates;
 	private SimplePlatformController player = null;
+	public AudioSource[] shiftSounds;
 
 	void Awake () {
 		inst = this;
@@ -58,6 +59,7 @@ public class CrateManager : MonoBehaviour {
 		}
 		if (shifted)
 		{
+			shiftSounds[Random.Range(0, shiftSounds.Length)].Play();
 			timeSinceLastShift = 0;
 			player.FreezeFor(moveTime);
 		}

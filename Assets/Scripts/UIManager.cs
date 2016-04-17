@@ -28,6 +28,7 @@ public class UIManager : MonoBehaviour {
 	{
 		EnabledButton("Victory!");
 		PlayerPrefs.SetInt(PortalsNumber.PORTALS, PlayerPrefs.GetInt(PortalsNumber.PORTALS) + 1);
+		GetComponent<AudioSource>().Play();
 	}
 
 	private void EnabledButton(string text) 

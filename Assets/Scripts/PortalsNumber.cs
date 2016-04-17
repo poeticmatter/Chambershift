@@ -20,7 +20,6 @@ public class PortalsNumber : MonoBehaviour {
 
 	public void SelectedPortals()
 	{
-		Debug.Log(setup.value);
 		PlayerPrefs.SetInt(PORTALS, Mathf.RoundToInt(setup.value));
 	}
 }
