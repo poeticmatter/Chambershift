@@ -96,6 +96,11 @@ public class Spawn : MonoBehaviour {
 		
 	private void SpawnEnemies()
 	{
+		if (spawnPoints.Count <= 0)
+		{
+
+			return;
+		}
 		int randomLocation = Random.Range(0, spawnPoints.Count);
 		Transform spawnPoint = spawnPoints[randomLocation];
 		GameObject animation = (GameObject) Instantiate(spawnAnimation, spawnPoint.position, Quaternion.identity);

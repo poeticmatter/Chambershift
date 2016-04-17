@@ -29,8 +29,8 @@ public class CrateManager : MonoBehaviour {
 
 	private void DoShift()
 	{
-		int h = (int)Input.GetAxisRaw("HorizontalShift");
-		int v = (int)Input.GetAxisRaw("VerticalShift");
+		int h = (int)Input.GetAxisRaw("Horizontal");
+		int v = (int)Input.GetAxisRaw("Vertical");
 		if (h!=0)
 		{
 			v = 0; //Can't move both at the same time;

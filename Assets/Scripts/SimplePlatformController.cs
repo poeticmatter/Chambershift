@@ -55,7 +55,7 @@ public class SimplePlatformController : MonoBehaviour
 
 	private void HandleInput()
 	{
-		float h = Input.GetAxis("Horizontal");
+		float h = Input.GetAxis("HorizontalWalk");
 		if(grounded)
 		{
 			anim.SetFloat("Speed", Mathf.Abs(h)*2);
