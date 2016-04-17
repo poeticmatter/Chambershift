@@ -9,9 +9,12 @@ public class SimplePlatformController : MonoBehaviour
 	[HideInInspector]
 	public bool jump = false;
 	public float moveForce = 365f;
-	public float maxSpeed = 5f;
-	public float jumpForce = 1000f;
-	public Transform groundCheck;
+	public float maxSpeedHorizontal = 1f;
+	public float maxSpeedVertical = 1f;
+
+	private float freezeTime = 0;
+
+	private Vector3 velocity = Vector3.zero;
 
 
 	private bool grounded = false;
@@ -19,46 +22,73 @@ public class SimplePlatformController : MonoBehaviour
 	private Rigidbody2D rb2d;
 
 
-	// Use this for initialization
 	void Awake()
 	{
 		//anim = GetComponent<Animator>();
 		rb2d = GetComponent<Rigidbody2D>();
 	}
 
-	// Update is called once per frame
 	void Update()
 	{
-		grounded = Physics2D.Linecast(transform.position, groundCheck.position, 1 << LayerMask.NameToLayer("Ground"));
-		Debug.Log(grounded);
-		if (Input.GetButtonDown("Jump") && grounded)
-		{
-			jump = true;
-		}
+
 	}
 
 	void FixedUpdate()
+	{
+		if (freezeTime > 0)
+		{
+
+			freezeTime-= Time.fixedDeltaTime;
+			if (freezeTime<=0)
+			{
+				rb2d.velocity = velocity;
+				velocity = Vector3.zero;
+			} else
+			{
+				rb2d.velocity = Vector3.zero;
+			}
+		}
+		else
+		{
+			HandleInput();
+			CapSpeed();
+		}
+		
+
+
+		
+
+	}
+
+	private void HandleInput()
 	{
 		float h = Input.GetAxis("Horizontal");
 
 		//anim.SetFloat("Speed", Mathf.Abs(h));
 
-		if (h * rb2d.velocity.x < maxSpeed)
-			rb2d.AddForce(Vector2.right * h * moveForce);
-
-		if (Mathf.Abs(rb2d.velocity.x) > maxSpeed)
-			rb2d.velocity = new Vector2(Mathf.Sign(rb2d.velocity.x) * maxSpeed, rb2d.velocity.y);
-
-		if (h > 0 && !facingRight)
-			Flip();
-		else if (h < 0 && facingRight)
-			Flip();
-
-		if (jump)
+		if (h * rb2d.velocity.x < maxSpeedHorizontal)
 		{
-			//anim.SetTrigger("Jump");
-			rb2d.AddForce(new Vector2(0f, jumpForce));
-			jump = false;
+			rb2d.AddForce(Vector2.right * h * moveForce);
+		}
+		if (h > 0 && !facingRight)
+		{
+			Flip();
+		}
+		else if (h < 0 && facingRight)
+		{
+			Flip();
+		}
+	}
+
+	private void CapSpeed()
+	{
+		if (Mathf.Abs(rb2d.velocity.x) > maxSpeedHorizontal)
+		{
+			rb2d.velocity = new Vector2(Mathf.Sign(rb2d.velocity.x) * maxSpeedHorizontal, rb2d.velocity.y);
+		}
+		if (Mathf.Abs(rb2d.velocity.y) > maxSpeedVertical)
+		{
+			rb2d.velocity = new Vector2(rb2d.velocity.x, Mathf.Sign(rb2d.velocity.y) * maxSpeedVertical);
 		}
 	}
 
@@ -69,5 +99,14 @@ public class SimplePlatformController : MonoBehaviour
 		Vector3 theScale = transform.localScale;
 		theScale.x *= -1;
 		transform.localScale = theScale;
+	}
+
+	public void FreezeFor(float time)
+	{
+		velocity = rb2d.velocity;
+		rb2d.velocity = Vector3.zero;
+		freezeTime = time;
+
+
 	}
 }

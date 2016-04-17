@@ -18,11 +18,13 @@ public class ScreenWrapper : MonoBehaviour {
 				Vector3 offset = new Vector3(x * aspectRatio.x, y * aspectRatio.y, 0);
                 SpriteRenderer clone = (SpriteRenderer)Instantiate(spriteRenderer, transform.position + offset, Quaternion.identity);
 				clone.transform.parent = this.transform;
+				clone.gameObject.AddComponent<BoxCollider2D>();
+				clone.gameObject.GetComponent<BoxCollider2D>().size = GetComponent<BoxCollider2D>().size;
+				clone.gameObject.GetComponent<BoxCollider2D>().offset = GetComponent<BoxCollider2D>().offset;
 				wrapClones[i++] = clone;
 			}
 		}	
 	}
-	
 	
 	void Update () {
 			int xSign = (int)Mathf.Sign(transform.position.x);
