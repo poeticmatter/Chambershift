@@ -7,10 +7,11 @@ public class SimplePlatformController : MonoBehaviour
 	[HideInInspector]
 	public bool facingRight = true;
 	[HideInInspector]
-	public bool jump = false;
 	public float moveForce = 365f;
 	public float maxSpeedHorizontal = 1f;
 	public float maxSpeedVertical = 1f;
+
+	public Transform groundCheck;
 
 	private float freezeTime = 0;
 
@@ -18,26 +19,24 @@ public class SimplePlatformController : MonoBehaviour
 
 
 	private bool grounded = false;
-	//private Animator anim;
+	public Animator anim;
 	private Rigidbody2D rb2d;
 
 
 	void Awake()
 	{
-		//anim = GetComponent<Animator>();
 		rb2d = GetComponent<Rigidbody2D>();
 	}
 
 	void Update()
 	{
-
+		grounded = Physics2D.Linecast(transform.position, groundCheck.position, 1 << LayerMask.NameToLayer("Ground"));
 	}
 
 	void FixedUpdate()
 	{
 		if (freezeTime > 0)
 		{
-
 			freezeTime-= Time.fixedDeltaTime;
 			if (freezeTime<=0)
 			{
@@ -53,18 +52,19 @@ public class SimplePlatformController : MonoBehaviour
 			HandleInput();
 			CapSpeed();
 		}
-		
-
-
-		
-
 	}
 
 	private void HandleInput()
 	{
 		float h = Input.GetAxis("Horizontal");
-
-		//anim.SetFloat("Speed", Mathf.Abs(h));
+		if(grounded)
+		{
+			anim.SetFloat("Speed", Mathf.Abs(h)*2);
+		}
+		else
+		{
+			anim.SetFloat("Speed", 0);
+		}
 
 		if (h * rb2d.velocity.x < maxSpeedHorizontal)
 		{

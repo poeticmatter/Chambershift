@@ -1,13 +1,11 @@
 fileFormatVersion: 2
-guid: c47ec21dd0a5f6942915e031e9c3c681
-timeCreated: 1460882460
+guid: c9ea118fcc1f52848a104908e0d611c1
+timeCreated: 1460882170
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
-    21300000: gunner_0
-    21300002: gunner_1
-    21300004: gunner_2
-    21300006: gunner_3
+    21300000: enemy2_0
+    21300002: enemy2_1
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -54,46 +52,24 @@ TextureImporter:
   buildTargetSettings: []
   spriteSheet:
     sprites:
-    - name: gunner_0
+    - name: enemy2_0
       rect:
         serializedVersion: 2
         x: 0
-        y: 16
-        width: 16
-        height: 16
+        y: 8
+        width: 8
+        height: 8
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
-    - name: gunner_1
+    - name: enemy2_1
       rect:
         serializedVersion: 2
-        x: 16
-        y: 16
-        width: 16
-        height: 16
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-    - name: gunner_2
-      rect:
-        serializedVersion: 2
-        x: 0
-        y: 0
-        width: 16
-        height: 16
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-    - name: gunner_3
-      rect:
-        serializedVersion: 2
-        x: 16
-        y: 0
-        width: 16
-        height: 16
+        x: 8
+        y: 8
+        width: 8
+        height: 8
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
