@@ -9,6 +9,10 @@ public class DieOnContant : MonoBehaviour
 		if (coll.gameObject.tag == "Player")
 		{
 			Spawn.inst.spawnPoints.Remove(this.transform);
+			if (Spawn.inst.spawnPoints.Count <= 0)
+			{
+				UIManager.inst.Win();
+			}
 			Destroy(this.gameObject);
 		}
 			
