@@ -21,6 +21,8 @@ public class Spawn : MonoBehaviour {
 	public float enemy1Chance;
 	public float enemy2Chance;
 
+	public GameObject spawnAnimation;
+
 	private float spawnTimer = 0;
 
 	public static Spawn inst;
@@ -91,14 +93,31 @@ public class Spawn : MonoBehaviour {
 		}
 	}
 
+		
 	private void SpawnEnemies()
 	{
 		int randomLocation = Random.Range(0, spawnPoints.Count);
-		Vector3 location = spawnPoints[randomLocation].position;
+		Transform spawnPoint = spawnPoints[randomLocation];
+		GameObject animation = (GameObject) Instantiate(spawnAnimation, spawnPoint.position, Quaternion.identity);
+		animation.transform.parent = spawnPoint;
+		StartCoroutine(SpawnEnemy(spawnPoint.position, randomLocation, 0.7f,animation));
+		
+	}
+
+	protected IEnumerator SpawnEnemy(Vector3 location, int index, float delay, GameObject animation)
+	{
+		float timeCouner = 0;
+		while (timeCouner < delay)
+		{
+			timeCouner += Time.deltaTime;
+			yield return null;
+		}
+
 		float randomEnemy = Random.Range(0, enemy1Chance + enemy2Chance);
 		GameObject enemy = randomEnemy < enemy1Chance ? enemy1 : enemy2;
 		Instantiate(enemy, location, Quaternion.identity);
-		
+		Destroy(animation.gameObject);
+
 	}
 }
 
