@@ -4,23 +4,12 @@ using System.Collections;
 
 public class LoseOnContact : MonoBehaviour {
 
-	private GameObject gameOver;
-
-	void Start()
-	{
-		gameOver = GameObject.FindGameObjectWithTag("GameOver");
-		gameOver.SetActive(false);
-	}
-
 	void OnCollisionEnter2D(Collision2D coll)
 	{
 		if (coll.gameObject.tag == "Enemy")
 		{
-			gameOver.SetActive(true);
+			UIManager.inst.GameOver();
 			GetComponent<SimplePlatformController>().enabled = false;
-
 		}
-
-
 	}
 }

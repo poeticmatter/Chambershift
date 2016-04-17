@@ -98,7 +98,6 @@ public class Spawn : MonoBehaviour {
 	{
 		if (spawnPoints.Count <= 0)
 		{
-
 			return;
 		}
 		int randomLocation = Random.Range(0, spawnPoints.Count);

@@ -14,9 +14,6 @@ public class EnemyMovement : MonoBehaviour {
 	public float maxSpeedHorizontal = 1f;
 	public float maxSpeedVertical = 1f;
 
-	private Vector3 velocity = Vector3.zero;
-
-
 	private bool grounded = false;
 	public Animator anim;
 	public SpriteRenderer spriteRenderer;

@@ -7,7 +7,5 @@ public class RandomCrateSprite : MonoBehaviour {
 	
 	void Awake () {
 		spriteRenderer.sprite = sprites[Random.Range(0, sprites.Length)];
-	}
-	
-	
+	}	
 }
