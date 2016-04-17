@@ -12,7 +12,6 @@ public class CrateManager : MonoBehaviour {
 
 	void Awake () {
 		inst = this;
-		crates = FindObjectsOfType<CrateShift>();
 	}
 
 	void Update()
@@ -36,6 +35,11 @@ public class CrateManager : MonoBehaviour {
 		{
 			v = 0; //Can't move both at the same time;
 		}
+		if (h==0 && v==0)
+		{
+			return;
+		}
+		crates = FindObjectsOfType<CrateShift>();
 		bool shifted = false;
 		for (int i = 0; i < crates.Length; i++)
 		{
