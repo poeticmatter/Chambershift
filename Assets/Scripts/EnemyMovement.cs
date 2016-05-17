@@ -1,95 +1,51 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class EnemyMovement : MonoBehaviour {
+public class EnemyMovement : MovingObject {
 
 	public Transform leftCheck;
 	public Transform rightCheck;
-	public Transform groundCheck;
 
 	public bool facingRight = false;
 	public bool bumpLeft = false;
 	public bool bumpRight = false;
-	public float moveForce = 365f;
-	public float maxSpeedHorizontal = 1f;
-	public float maxSpeedVertical = 1f;
 
-	private bool grounded = false;
-	public Animator anim;
 	public SpriteRenderer spriteRenderer;
-	private Rigidbody2D rb2d;
 
 
-	void Awake()
+	public void Advance(float inverseMoveTime)
 	{
-		rb2d = GetComponent<Rigidbody2D>();
-	}
-
-	void Update()
-	{
-		grounded = Physics2D.Linecast(transform.position, groundCheck.position, 1 << LayerMask.NameToLayer("Ground"));
-		if (Physics2D.Linecast(transform.position, leftCheck.position, 1 << LayerMask.NameToLayer("Ground")))
+		UpdateFacing();
+        Debug.Log("bumpRight " + bumpRight + " bumpLeft " + bumpLeft);
+		if (facingRight && !bumpRight)
 		{
-			bumpLeft = true;
+			Move(1, 0, inverseMoveTime);
 		}
-		else if ( Physics2D.Linecast(transform.position, rightCheck.position, 1 << LayerMask.NameToLayer("Ground")))
+		else if (!facingRight && !bumpLeft)
 		{
-			bumpRight = true;
+			Move(-1, 0, inverseMoveTime);
 		}
 	}
 
-	void FixedUpdate()
+	private void UpdateFacing()
 	{
-		HandleInput();
-		CapSpeed();
-		if (bumpLeft)
+		bumpLeft = CheckBump(leftCheck.position);
+		bumpRight = CheckBump(rightCheck.position);
+		if (bumpLeft || bumpRight)
 		{
-			SetFacingRight(true);
-			bumpLeft = false;
+			SetFacingRight(bumpLeft);
 		}
-		else if (bumpRight)
-		{
-			SetFacingRight(false);
-			bumpRight = false;
-		}
+		
 	}
 
-	private void HandleInput()
+	private bool CheckBump(Vector2 to)
 	{
-		float direction = facingRight ? 0.1f : -0.1f;
-		if (grounded)
-		{
-			anim.SetFloat("Speed", Mathf.Abs(direction) * 2);
-			
-		}
-		else
-		{
-			anim.SetFloat("Speed", 0);
-			direction *= 0.1f;
-		}
-
-		if (direction * rb2d.velocity.x < maxSpeedHorizontal)
-		{
-			rb2d.AddForce(Vector2.right * direction * moveForce);
-		}
-
-	}
-
-	private void CapSpeed()
-	{
-		if (Mathf.Abs(rb2d.velocity.x) > maxSpeedHorizontal)
-		{
-			rb2d.velocity = new Vector2(Mathf.Sign(rb2d.velocity.x) * maxSpeedHorizontal, rb2d.velocity.y);
-		}
-		if (Mathf.Abs(rb2d.velocity.y) > maxSpeedVertical)
-		{
-			rb2d.velocity = new Vector2(rb2d.velocity.x, Mathf.Sign(rb2d.velocity.y) * maxSpeedVertical);
-		}
+		return Physics2D.Linecast(transform.position, to, 1 << LayerMask.NameToLayer("Ground"));
 	}
 
 	private void SetFacingRight(bool facingRight)
 	{
-		if(this.facingRight != facingRight)
+		if (this.facingRight != facingRight)
 		{
 			this.facingRight = facingRight;
 			spriteRenderer.flipX = facingRight;

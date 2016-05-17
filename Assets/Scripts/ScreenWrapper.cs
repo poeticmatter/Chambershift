@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+[RequireComponent(typeof(MovingObject))]
 public class ScreenWrapper : MonoBehaviour {
 	public Vector2 aspectRatio;
 	public SpriteRenderer spriteRenderer;
@@ -18,26 +19,37 @@ public class ScreenWrapper : MonoBehaviour {
 				Vector3 offset = new Vector3(x * aspectRatio.x, y * aspectRatio.y, 0);
                 SpriteRenderer clone = (SpriteRenderer)Instantiate(spriteRenderer, transform.position + offset, Quaternion.identity);
 				clone.transform.parent = this.transform;
-				clone.gameObject.AddComponent<BoxCollider2D>();
-				clone.gameObject.GetComponent<BoxCollider2D>().size = GetComponent<BoxCollider2D>().size;
-				clone.gameObject.GetComponent<BoxCollider2D>().offset = GetComponent<BoxCollider2D>().offset;
+				BoxCollider2D box2d = GetComponent<BoxCollider2D>();
+				if (box2d)
+				{
+					clone.gameObject.AddComponent<BoxCollider2D>();
+					clone.gameObject.GetComponent<BoxCollider2D>().size = box2d.size;
+					clone.gameObject.GetComponent<BoxCollider2D>().offset = box2d.offset;
+					clone.gameObject.layer = LayerMask.NameToLayer("Ground");
+                }
 				wrapClones[i++] = clone;
 			}
 		}	
 	}
 	
 	void Update () {
-			int xSign = (int)Mathf.Sign(transform.position.x);
-			int ySign = (int)Mathf.Sign(transform.position.y);
-			Vector3 teleport = Vector3.zero;
-            if (Mathf.Abs(transform.position.x) > aspectRatio.x / 2)
-			{
-				teleport.x = aspectRatio.x * xSign;
-			}
-			if (Mathf.Abs(transform.position.y) > aspectRatio.y / 2)
-			{
-				teleport.y = aspectRatio.y * ySign;
-			}
-			transform.position = transform.position + teleport*-1;
+		Vector3 teleport = Vector3.zero;
+		teleport.x = GetTeleport(transform.position.x, aspectRatio.x);
+		teleport.y = GetTeleport(transform.position.y, aspectRatio.y);
+		if(teleport.x != 0 || teleport.y != 0) 
+		transform.position = transform.position + teleport;
+	}
+
+	private float GetTeleport(float postion, float aspectRatio)
+	{
+		if (postion < 0)
+		{
+			return aspectRatio;
+		}
+		if (postion > aspectRatio)
+		{
+			return -aspectRatio;
+		}
+		return 0;
 	}
 }

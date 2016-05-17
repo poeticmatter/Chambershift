@@ -10,8 +10,9 @@ public class Spawn : MonoBehaviour {
 	public GameObject spawnPoint;
 
 	public int numberOfCrates;
-	public int columns = 15;
-	public int rows = 9;
+	public int columns = 16;
+	public int rows = 10;
+	public int portals = 3;
 	private List<Vector3> gridPositions = new List<Vector3>();
 	public List<Transform> spawnPoints = new List<Transform>();
 
@@ -30,13 +31,22 @@ public class Spawn : MonoBehaviour {
 	{
 		inst = this;
 		InitialiseList();
+	}
+
+	void Start()
+	{
 		SpawnPlayer();
 		SpawnCrates();
 		SpawnSpawnPoints();
+		GameManager.inst.SetupComplete();
 	}
 
 	void Update()
 	{
+		if (!GameManager.inst.IsGameRunning())
+		{
+			return;
+		}
 		if (spawnTimer > 0)
 		{
 			spawnTimer -= Time.deltaTime;
@@ -50,9 +60,9 @@ public class Spawn : MonoBehaviour {
 	void InitialiseList()
 	{
 		gridPositions.Clear();
-		for (int x = -columns/2; x <= columns/2; x++)
+		for (int x = 0; x <= columns; x++)
 		{
-			for (int y = -rows/2; y <= rows/2; y++)
+			for (int y = 0; y <= rows; y++)
 			{
 				gridPositions.Add(new Vector3(x, y, 0f));
 			}
@@ -82,7 +92,7 @@ public class Spawn : MonoBehaviour {
 
 	private void SpawnSpawnPoints()
 	{
-		for (int i = 0; i < PlayerPrefs.GetInt(PortalsNumber.PORTALS); i++)
+		for (int i = 0; i < portals; i++)
 		{
 			int randomLocation = Random.Range(0, gridPositions.Count);
 			Vector3 location = gridPositions[randomLocation];
